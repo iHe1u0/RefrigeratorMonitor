@@ -1,9 +1,15 @@
 #include "kt_utility.h"
+#include <iostream>
 
 DBManager &DBManager::getInstance()
 {
   static DBManager instance("test.db");
   return instance;
+}
+
+DBManager::DBManager(const std::string &db_name) : db_name_(db_name), _mdb(nullptr)
+{
+  openDatabase();
 }
 
 DBManager::~DBManager()
@@ -61,10 +67,6 @@ bool DBManager::executeQuery(const std::string &sql_query)
     std::cout << "成功执行查询" << std::endl;
     return true;
   }
-}
-
-DBManager::DBManager(const std::string &db_name) : db_name_(db_name), _mdb(nullptr)
-{
 }
 
 int DBManager::callback(void *NotUsed, int argc, char **argv, char **azColName)

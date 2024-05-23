@@ -9,10 +9,7 @@ extern "C"
 }
 #endif
 
-#include <iostream>
 #include <string>
-#include <vector>
-#include <mutex>
 
 typedef std::string String;
 
@@ -26,7 +23,6 @@ class DBManager
   DBManager(DBManager const&) = delete;
   void operator=(DBManager const&) = delete;
 
-  bool openDatabase();
 
   bool createTable(const std::string& sql_create_table);
 
@@ -35,10 +31,13 @@ class DBManager
  private:
   DBManager(const std::string& db_name);
   virtual ~DBManager();
+
+  bool openDatabase();
+  static int callback(void* NotUsed, int argc, char** argv, char** azColName);
+
+private:
   std::string db_name_;
   sqlite3*    _mdb;
-
-  static int callback(void* NotUsed, int argc, char** argv, char** azColName);
 };
 
 #define g_DbManager DBManager::getInstance()
